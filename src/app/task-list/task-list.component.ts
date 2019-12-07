@@ -89,10 +89,12 @@ export class TaskListComponent implements OnInit {
 
 /* Dialog Tarefa */
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'dialog-task',
   templateUrl: 'dialog-task.html',
   styleUrls: ['./task-list.component.css']
 })
+// tslint:disable-next-line:component-class-suffix
 export class DialogTask {
   registerForm: FormGroup;
   type: string;
@@ -127,10 +129,12 @@ export class DialogTask {
 
 /* Dialog Confirm */
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'dialog-confirm',
   templateUrl: 'dialog-confirm.html',
   styleUrls: ['./task-list.component.css']
 })
+// tslint:disable-next-line:component-class-suffix
 export class DialogConfirm {
 
   constructor(
