@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Confirmar</h1>
+<div class="content-dialog-confirm">
+    <label>{{data.title}}</label>
+
+    <div class="action-dialog-confirm">
+        <button mat-raised-button color="primary" style="margin-right: 30px" (click)="cancel()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="save()" >{{data.action}}</button>
+    </div>
+
+</div>
+

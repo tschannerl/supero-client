@@ -1,0 +1,79 @@
+.content{
+    position: absolute;
+    top: 30px ;
+    right: 30px;
+    bottom: 30px;
+    left: 30px;
+    margin: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.action-form{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.task-table{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+table {
+    width: 90%;
+}
+
+
+
+/*styles dialog*/
+.main-dialog{
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+    justify-content: space-between;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.title-dialog{
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+.content-dialog{
+    display: flex;
+    flex-direction: column;
+}
+
+.action-dialog{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+
+/*dialog confirm*/
+.content-dialog-confirm{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    height: 60%;
+    overflow: hidden;
+}
+
+.action-dialog-confirm{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}

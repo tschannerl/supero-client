@@ -1,0 +1,45 @@
+<div class="content">
+    <div class="action-form">
+        <button title="Adicionar nova tarefa" mat-mini-fab style="width: 60px; height: 60px;" color="primary" (click)="newTask()"><mat-icon>add</mat-icon></button>
+    </div>
+    <div class="task-table">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="seq">
+                <th mat-header-cell *matHeaderCellDef> Seq </th>
+                <td mat-cell *matCellDef="let element"> {{element.seq}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef style="width: 60%"> Título </th>
+                <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateCreate">
+                <th mat-header-cell *matHeaderCellDef> Data Criação </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateCreate}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">   
+                    <button mat-icon-button aria-label="Editar" title="Editar" (click)="editTask(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button> 
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">   
+                    <button mat-icon-button aria-label="Deletar" title="Deletar" (click)="deleteTask(element)">
+                        <mat-icon>delete</mat-icon>
+                    </button> 
+                </td>
+            </ng-container>            
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+</div>

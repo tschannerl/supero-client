@@ -1,0 +1,27 @@
+<div class="title-dialog">
+    <mat-toolbar-row>
+        <h2>
+            <label>{{type}}</label>
+        </h2>
+        
+    </mat-toolbar-row>
+</div>
+
+<div style="height: 85%;">
+    <form [formGroup]="registerForm" class="main-dialog">
+        <div class="content-dialog">
+            <mat-form-field>
+                <input matInput formControlName="title" placeholder="Título:">
+            </mat-form-field>
+        
+            <mat-form-field>
+                <textarea matInput formControlName="description" placeholder="Descrição:" style="height: 300px;"></textarea>
+            </mat-form-field>    
+        </div>
+        
+        <div class="action-dialog">
+            <button mat-raised-button color="primary" style="margin-right: 30px" (click)="cancel()">Cancelar</button>
+            <button mat-raised-button color="primary" (click)="save()" >Salvar</button>
+        </div>
+    </form>
+</div>
