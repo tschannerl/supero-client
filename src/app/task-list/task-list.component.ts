@@ -103,6 +103,7 @@ export class TaskListComponent implements OnInit {
     this.taskService.updateStatusTask(task, status).pipe().subscribe(
       data => {
         this.toastr.success('Tarefa com status atulizado!!!', 'Atualizar Tarefa');
+        this.findAllTask();
       },
       error => {
         this.toastr.error('Problema ao atualizar status da tarefa', 'Atualizar Tarefa');

@@ -4,3 +4,25 @@
  * This is a general purpose Gradle build.
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
+// 1
+plugins {
+  id 'war'
+  id "com.moowork.node" version "1.2.0"
+}
+
+// 2
+node {
+  version = '10.16.0'
+  npmVersion = '6.9.0'
+  download = true
+}
+
+// 3
+war.dependsOn 'npm_run_build'
+
+
+// 4
+war {
+  from 'dist' into ''
+}
+
