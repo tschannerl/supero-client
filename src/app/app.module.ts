@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MaterialModule } from './material-modules';
 import { TaskListComponent,  DialogTask, DialogConfirm } from './task-list/task-list.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TaskListComponent,  DialogTask, DialogConfirm } from './task-list/task-
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
 
   entryComponents: [

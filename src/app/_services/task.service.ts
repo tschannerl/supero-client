@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Task } from '../_models/task';
 import { environment } from '../../environments/environment';
 import { throwError, Observable } from 'rxjs';
@@ -50,7 +50,9 @@ export class TaskService {
 
   // envio rest de delete de tarefa
   deleteTask(task: Task) {
-
+    return this.http.delete(`${environment.serverUrl}/task/${task.id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // get rest de todas as tarefas

@@ -3,6 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { TaskService } from '../_services/task.service';
 import { Task } from '../_models/task';
+import { ToastrService } from 'ngx-toastr';
 
 export interface DialogData {
   type: string;
@@ -21,10 +22,10 @@ export interface DialogDataConfirm {
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
-  public displayedColumns: string[] = ['id', 'title', 'dateCreate', 'status', 'edit', 'delete'];
+  public displayedColumns: string[] = ['id', 'title', 'dateCreate', 'dateUpdate', 'dateCompleted', 'status', 'edit', 'delete'];
   public dataSource = null;
 
-  constructor(public dialog: MatDialog, private taskService: TaskService) { }
+  constructor(public dialog: MatDialog, private taskService: TaskService, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.findAllTask();
@@ -45,10 +46,15 @@ export class TaskListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogTask, {
       width: '80%', height: '80%',
-      data: {type: 'new', element: data}
+      data: {type: 'new', return: '', element: data}
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result === 'ok') {
+        this.toastr.success('Tarefa inserida com sucesso!!!', 'Nova Tarefa');
+      } else if (result === 'error') {
+        this.toastr.error('Problema ao inserir nova tarefa', 'Nova Tarefa');
+      }
       this.findAllTask();
     });
   }
@@ -61,6 +67,11 @@ export class TaskListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result === 'ok') {
+        this.toastr.success('Tarefa editada com sucesso!!!', 'Edição Tarefa');
+      } else if (result === 'error') {
+        this.toastr.error('Problema ao editar tarefa', 'Edição Tarefa');
+      }
       this.findAllTask();
     });
   }
@@ -73,7 +84,12 @@ export class TaskListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      if (result === 'ok') {
+        this.toastr.success('Tarefa deletada com sucesso!!!', 'Deletar Tarefa');
+      } else if (result === 'error') {
+        this.toastr.error('Problema ao deletar tarefa', 'Deletar Tarefa');
+      }
+      this.findAllTask();
     });
   }
 
@@ -86,11 +102,10 @@ export class TaskListComponent implements OnInit {
     const task: Task = element;
     this.taskService.updateStatusTask(task, status).pipe().subscribe(
       data => {
-        console.log(data);
+        this.toastr.success('Tarefa com status atulizado!!!', 'Atualizar Tarefa');
       },
       error => {
-        console.log('error : ' + error);
-        // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+        this.toastr.error('Problema ao atualizar status da tarefa', 'Atualizar Tarefa');
       }
     );
   }
@@ -148,12 +163,10 @@ export class DialogTask {
 
       this.taskService.saveTask(task).pipe().subscribe(
         data => {
-          console.log(data);
-          this.dialogRef.close();
+          this.dialogRef.close('ok');
         },
         error => {
-          console.log('error : ' + error);
-          // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+          this.dialogRef.close('error');
         }
       );
     } else if (this.data.type === 'edit') { // caso o tipo seja editar tarefa envia put
@@ -164,12 +177,10 @@ export class DialogTask {
 
       this.taskService.updateTask(task).pipe().subscribe(
         data => {
-          console.log(data);
-          this.dialogRef.close();
+          this.dialogRef.close('ok');
         },
         error => {
-          console.log('error : ' + error);
-          // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+          this.dialogRef.close('error');
         }
       );
     }
@@ -188,7 +199,7 @@ export class DialogTask {
 export class DialogConfirm {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogConfirm>, @Inject(MAT_DIALOG_DATA) public data: DialogDataConfirm) {}
+    public dialogRef: MatDialogRef<DialogConfirm>, @Inject(MAT_DIALOG_DATA) public data: DialogDataConfirm, private taskService: TaskService) {}
 
     // cancela exclusão
   cancel(): void {
@@ -197,6 +208,17 @@ export class DialogConfirm {
 
   // confirma a exclusão
   confirm(): void {
+    const task: Task = this.data.element;
+
+    this.taskService.deleteTask(task).pipe().subscribe(
+      data => {
+        this.dialogRef.close('ok');
+      },
+      error => {
+        this.dialogRef.close('error');
+      }
+    );
+
     this.dialogRef.close();
   }
 }
