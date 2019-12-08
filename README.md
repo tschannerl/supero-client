@@ -6,6 +6,14 @@ Projeto criado com [Angular CLI](https://github.com/angular/angular-cli) version
 
 http://tschannerl.com.br/
 
+## Funções do Sistema
+* Inclusão de uma nova tarefa
+* Edição de uma tarefa
+* Deleção de uma tarefa
+* Mudar status (Concluído) da tarefa
+
+* Comunicação via REST com o [SuperoServer](https://github.com/tschannerl/supero-server)
+
 ## Uso do Sistema
 
 <img src="src/assets/prints/1.png">
