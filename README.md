@@ -2,7 +2,8 @@
 
 Projeto criado com [Angular CLI](https://github.com/angular/angular-cli) version 8.1.1.
 
-## Acesso Online do Sistema
+## Acesso Online do Sistema 
+### (Hospedado no Google Cloud Plataform, usando Container Docker)
 
 http://tschannerl.com.br/
 
