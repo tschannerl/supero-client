@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { TaskService } from '../_services/task.service';
+import { Task } from '../_models/task';
 
 export interface DialogData {
   type: string;
@@ -13,39 +15,33 @@ export interface DialogDataConfirm {
   element: any;
 }
 
-export interface Data {
-  seq: number;
-  title: string;
-  description: string;
-  dateCreate: string;
-}
-
-const mock: Data[] = [
-  {seq: 1, title: 'Hydrogen  eowjejwkjekwjekjwkjeklwheklwjkejkjkjekwjekwjekj', description: 'kjsjdksjdkskdjks', dateCreate: '05/12/2019 22:54:55'},
-  {seq: 2, title: 'teste', description: 'kjsjdksjdkskdjks', dateCreate: '05/12/2019 22:54:55'},
-  {seq: 3, title: 'coco', description: 'kjsjdksjdkskdjks', dateCreate: '05/12/2019 22:54:55'},
-  {seq: 4, title: 'pinto', description: 'kjsjdksjdkskdjks', dateCreate: '05/12/2019 22:54:55'},
-];
-
-
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
+  private displayedColumns: string[] = ['id', 'title', 'dateCreate', 'status', 'edit', 'delete'];
+  private dataSource = null;
 
-
-  displayedColumns: string[] = ['seq', 'title', 'dateCreate', 'edit', 'delete'];
-  dataSource = mock;
-
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private taskService: TaskService) { }
 
   ngOnInit() {
+    this.findAllTask();
   }
 
+  // buscando todas as tarefas
+  findAllTask() {
+    this.taskService.getAllTasks().pipe().subscribe(
+      data => {
+        this.dataSource = data;
+      }
+    );
+  }
+
+  // abrindo dialog para nova tarefa
   newTask(): void {
-    const data: Data = {seq: 0, title: '', description: '', dateCreate: ''};
+    const data: Task = {id: 0, title: '', description: '', dtCreate: '', dtUpdate: '', dtConclusion: '', status: ''};
 
     const dialogRef = this.dialog.open(DialogTask, {
       width: '80%', height: '80%',
@@ -53,10 +49,11 @@ export class TaskListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.findAllTask();
     });
   }
 
+  // abrindo dialog para editar a tarefa
   editTask(data: any): void {
     const dialogRef = this.dialog.open(DialogTask, {
       width: '80%', height: '80%',
@@ -64,10 +61,11 @@ export class TaskListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.findAllTask();
     });
   }
 
+  // abrindo dialog para confirmar a exclusão de uma tarefa
   deleteTask(data: any): void {
     const dialogRef = this.dialog.open(DialogConfirm, {
       width: '400px', height: '200px',
@@ -78,6 +76,10 @@ export class TaskListComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+
+  statusTask(data: any): void {
+
+  }
 }
 
 
@@ -87,7 +89,7 @@ export class TaskListComponent implements OnInit {
 
 
 
-/* Dialog Tarefa */
+/* ############ Dialog Tarefa ##############*/
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'dialog-task',
@@ -100,12 +102,13 @@ export class DialogTask {
   type: string;
 
   constructor(
-    public dialogRef: MatDialogRef<DialogTask>, @Inject(MAT_DIALOG_DATA) public data: DialogData,  private formBuilder: FormBuilder) {
+    public dialogRef: MatDialogRef<DialogTask>, @Inject(MAT_DIALOG_DATA) public data: DialogData,  private formBuilder: FormBuilder, private taskService: TaskService) {
       this.registerForm = this.formBuilder.group({
         title: [data.element.title],
         description: [data.element.description]
       });
 
+      // identificador do tipo do dialog
       switch (data.type) {
         case 'edit':
           this.type = 'Editar Tarefa';
@@ -120,14 +123,47 @@ export class DialogTask {
   cancel(): void {
     this.dialogRef.close();
   }
-  save(): void {
-    this.dialogRef.close();
-  }
 
+  // clicik de salvar/atualizar tarefa
+  save(): void {
+    if (this.data.type === 'new') { // caso o tipo seja nova tarefa envia post
+      const task: Task = {} as any;
+
+      task.title = this.registerForm.controls.title.value;
+      task.description = this.registerForm.controls.description.value;
+
+      this.taskService.saveTask(task).pipe().subscribe(
+        data => {
+          console.log(data);
+          this.dialogRef.close();
+        },
+        error => {
+          console.log('error : ' + error);
+          // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+        }
+      );
+    } else if (this.data.type === 'edit') { // caso o tipo seja editar tarefa envia put
+      const task: Task = this.data.element;
+
+      task.title = this.registerForm.controls.title.value;
+      task.description = this.registerForm.controls.description.value;
+
+      this.taskService.updateTask(task).pipe().subscribe(
+        data => {
+          console.log(data);
+          this.dialogRef.close();
+        },
+        error => {
+          console.log('error : ' + error);
+          // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+        }
+      );
+    }
+  }
 }
 
 
-/* Dialog Confirm */
+/* ############ Dialog Confirm ##############*/
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'dialog-confirm',
@@ -140,9 +176,12 @@ export class DialogConfirm {
   constructor(
     public dialogRef: MatDialogRef<DialogConfirm>, @Inject(MAT_DIALOG_DATA) public data: DialogDataConfirm) {}
 
+    // cancela exclusão
   cancel(): void {
     this.dialogRef.close();
   }
+
+  // confirma a exclusão
   confirm(): void {
     this.dialogRef.close();
   }

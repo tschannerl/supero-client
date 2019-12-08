@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MaterialModule } from './material-modules';
 import { TaskListComponent,  DialogTask, DialogConfirm } from './task-list/task-list.component';
@@ -22,7 +23,8 @@ import { TaskListComponent,  DialogTask, DialogConfirm } from './task-list/task-
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
 
   entryComponents: [
