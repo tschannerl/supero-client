@@ -21,8 +21,8 @@ export interface DialogDataConfirm {
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
-  private displayedColumns: string[] = ['id', 'title', 'dateCreate', 'status', 'edit', 'delete'];
-  private dataSource = null;
+  public displayedColumns: string[] = ['id', 'title', 'dateCreate', 'status', 'edit', 'delete'];
+  public dataSource = null;
 
   constructor(public dialog: MatDialog, private taskService: TaskService) { }
 
@@ -77,8 +77,22 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  statusTask(data: any): void {
+  changeStatus(event: any, element: any) {
+    let status = 'false';
 
+    if (event.checked) {
+      status = 'true';
+    }
+    const task: Task = element;
+    this.taskService.updateStatusTask(task, status).pipe().subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.log('error : ' + error);
+        // this.toastr.error('Erro ao realizar o registro, provável existência do cliente', 'Cadastro');
+      }
+    );
   }
 }
 

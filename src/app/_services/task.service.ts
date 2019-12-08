@@ -37,6 +37,17 @@ export class TaskService {
     );
   }
 
+  updateStatusTask(task: Task, status: string) {
+    const params = new FormData();
+
+    params.append('id', task.id.toString());
+    params.append('status', status);
+
+    return this.http.put(`${environment.serverUrl}/task/status`, params).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   // envio rest de delete de tarefa
   deleteTask(task: Task) {
 
